@@ -21,3 +21,13 @@ set ignorecase
 set showmatch
 set incsearch
 set hlsearch
+
+set backup
+set backupdir=~/.vim.backup/
+set directory=~/.vim.backup/
+set writebackup
+
+"Activate pathogen
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+
