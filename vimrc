@@ -8,7 +8,11 @@ map <C-K> :tabnew<CR>
 map <leader>n :NERDTreeToggle<CR>
 set guioptions=-T
 set guioptions=-b
-set guifont=Monospace\ 8
+if has("gui_macvim")
+	set guifont=Monaco:h10
+else
+	set guifont=Monospace\ 8
+endif
 colorscheme molokai
 
 nore ; :
