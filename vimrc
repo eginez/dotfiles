@@ -29,9 +29,10 @@ syntax on
 "---- Indentation ----"
 filetype plugin on
 filetype plugin indent on	" Turn on indentation rules per language
+set smartindent
 set tabstop=4
 set shiftwidth=4		    " Use 4 spaces for smartindent
-set autoindent
+set expandtab
 set mouse=a
 
 "---- Console UI & Text Display ----"
