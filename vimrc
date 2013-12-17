@@ -19,14 +19,17 @@ nore ; :
 cnoreabbrev W w
 cnoreabbrev Q q
 
+"clipboard sanity
+set clipboard=unnamed
+
 "Activate pathogen
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+call pathogen#infect()
 
 " Enable syntax highlighting
 syntax on
 
 "---- Indentation ----"
+filetype off
 filetype plugin on
 filetype plugin indent on	" Turn on indentation rules per language
 set smartindent
@@ -64,5 +67,3 @@ let g:CommandTMaxCachedDirectories=40
 
 "---- ctags ----"
 set tags=./tags;            " Look for tag file all the way up to root.
-
-
