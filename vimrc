@@ -13,7 +13,6 @@ if has("gui_macvim")
 else
 	set guifont=Monospace\ 8
 endif
-colorscheme molokai
 
 nore ; :
 cnoreabbrev W w

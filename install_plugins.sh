@@ -1,23 +1,25 @@
 #! /bin/bash
 
-if [ ! -d ~/.vim.backup ];
-then
-    mkdir -p ~/.vim.backup
-fi
+#Create directories
+mkdir -p ~/.vim.backup
+mkdir -p ~/.vim
 
-if [ ! -d ~/.vim ];
-then
-    mkdir -p ~/.vim
-fi
+echo "Creating vimrc file"
+ln -s `pwd -P`/vimrc ~/.vimrc
+
+
+echo "Downloading vim plugins"
+#Pathogen
+mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 #NerdTree
-wget -O tmp.zip  http://www.vim.org/scripts/download_script.php?src_id=17123 
-unzip -d ~/.vim tmp.zip && rm tmp.zip
+cd ~/.vim/bundle
+git clone https://github.com/scrooloose/nerdtree.git
 
-#Molokai
-wget -O molokai.vim http://www.vim.org/scripts/download_script.php?src_id=9750
-if [ ! -d ~/.vim/colors ];
-then
-    mkdir -p ~/.vim/colors
-fi
-mv molokai.vim ~/.vim/colors
+#Supertab
+cd ~/.vim/bundle
+git clone https://github.com/ervandew/supertab.git
+
+
+#echo "Creating gitconfig file"
