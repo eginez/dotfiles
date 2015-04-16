@@ -1,0 +1,13 @@
+[user]
+	name = Esteban
+	email = eginez@gmail.com
+[color]
+	ui = auto
+[alias]
+    s = status
+    co = checkout
+    lg = log --decorate --graph --pretty=oneline
+    lsb = branch -a
+    cmd = commit --amend
+[push]
+	default = matching

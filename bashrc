@@ -34,3 +34,9 @@ PS1='[\[\033[32m\]\w]\[\033[0m\]$(parse_repo)\n\[\033[1;36m\]\u\[\033[1;33m\]-> 
 
 
 function mountAndroid { hdiutil attach ~/android.dmg.sparseimage -mountpoint /Volumes/android; }
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
+[[ -s "/Users/eginez/.gvm/bin/gvm-init.sh" ]] && source "/Users/eginez/.gvm/bin/gvm-init.sh"

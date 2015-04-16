@@ -63,6 +63,16 @@ set writebackup
 let g:CommandTMaxFiles=200000
 let g:CommandTMaxDepth=40
 let g:CommandTMaxCachedDirectories=40
+"
+"Clojure
+au BufEnter *.clj RainbowParenthesesActivate
+au Syntax clojure RainbowParenthesesLoadRound
+au Syntax clojure RainbowParenthesesLoadSquare
+au Syntax clojure RainbowParenthesesLoadBraces
+
+"Fireplace-Clojure
+map <C-E> :Eval<CR>
+"
 
 "---- ctags ----"
 set tags=./tags;            " Look for tag file all the way up to root.
