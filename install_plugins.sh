@@ -7,6 +7,9 @@ mkdir -p ~/.vim
 echo "Creating vimrc file"
 ln -s `pwd -P`/vimrc ~/.vimrc
 
+echo "Creating gitconfig file"
+ln -s `pwd -P`/gitconfig ~/.gitconfig
+
 
 echo "Downloading vim plugins"
 #Pathogen
@@ -22,4 +25,3 @@ cd ~/.vim/bundle
 git clone https://github.com/ervandew/supertab.git
 
 
-#echo "Creating gitconfig file"
