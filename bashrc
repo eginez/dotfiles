@@ -29,6 +29,11 @@ function parse_repo()
     git branch &>/dev/null && echo "{at`git branch|grep '*'|cut -d'*' -f2`}"
 }
 
+function mysplit() {
+    python -c "import sys; all=sys.stdin.read().split('$1'); print '\n'.join(str(p) for p in all)"
+}
+
+
 #Enable git propmpt
 PS1='[\[\033[32m\]\w]\[\033[0m\]$(parse_repo)\n\[\033[1;36m\]\u\[\033[1;33m\]-> \[\033[0m\]'
 
