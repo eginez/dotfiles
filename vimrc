@@ -26,6 +26,7 @@ call pathogen#infect()
 
 " Enable syntax highlighting
 syntax on
+syntax enable
 
 "---- Indentation ----"
 filetype off
@@ -72,7 +73,12 @@ au Syntax clojure RainbowParenthesesLoadBraces
 
 "Fireplace-Clojure
 map <C-E> :Eval<CR>
+
 "
+"Solarized
+set background=light
+colorscheme solarized
+
 
 "---- ctags ----"
 set tags=./tags;            " Look for tag file all the way up to root.
