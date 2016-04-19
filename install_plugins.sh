@@ -24,4 +24,8 @@ git clone https://github.com/scrooloose/nerdtree.git
 cd ~/.vim/bundle
 git clone https://github.com/ervandew/supertab.git
 
+#Airline
+cd ~/.vim/bundle
+git clone https://github.com/vim-airline/vim-airline
+
 
