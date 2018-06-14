@@ -66,6 +66,9 @@ setopt INC_APPEND_HISTORY
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt SHARE_HISTORY
+setopt auto_cd
+#set cdpath to a meaningful locations, this allows to access and autocomplete as if it was a root directory
+#cdpath=($HOME/src)
 
 #Vim mode
 bindkey -v
