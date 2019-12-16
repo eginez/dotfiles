@@ -21,9 +21,6 @@ cnoreabbrev Q q
 "clipboard sanity
 set clipboard=unnamed
 
-"Activate pathogen
-call pathogen#infect()
-
 " Enable syntax highlighting
 syntax on
 syntax enable
@@ -59,11 +56,9 @@ set backupdir=~/.vim.backup/
 set directory=~/.vim.backup/
 set writebackup
 
+"Hightlight line
+set cursorline
 
-"Command t file limit
-let g:CommandTMaxFiles=200000
-let g:CommandTMaxDepth=40
-let g:CommandTMaxCachedDirectories=40
 "
 "Clojure
 au BufEnter *.clj RainbowParenthesesActivate
@@ -75,10 +70,46 @@ au Syntax clojure RainbowParenthesesLoadBraces
 map <C-E> :Eval<CR>
 
 "
-"Solarized
-set background=light
-colorscheme solarized
 
+call plug#begin('~/.vim/plugged')
+set rtp+=/usr/local/bin/fzf
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'micha/vim-colors-solarized'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'vim-airline/vim-airline'
+Plug 'artur-shaik/vim-javacomplete2'
+Plug 'mhinz/vim-startify'
+Plug 'davidhalter/jedi-vim'
+
+
+
+" Initialize plugin system
+call plug#end()
+nnoremap <C-o> :FZF<CR>
 
 "---- ctags ----"
 set tags=./tags;            " Look for tag file all the way up to root.
+let g:go_version_warning = 0
+
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+"
+"Solarized
+set background=dark
+colorscheme solarized
+
+"java autocomplete
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
