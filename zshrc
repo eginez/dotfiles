@@ -1,6 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 export GOPATH=/Users/eginez/repos/goland
 export PATH=$HOME/bin:/usr/local/bin:$PATH:$GOPATH/bin
+export NO_JAVA_PATH=$PATH
+
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/eginez/.oh-my-zsh
@@ -59,7 +61,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 #History saving
 HISTFILE=~/.zsh_history
-HISTSIZE=999999999
+HISTSIZE=99999999999
 SAVEHIST=$HISTSIZE
 setopt hist_ignore_all_dups
 setopt INC_APPEND_HISTORY
@@ -139,21 +141,41 @@ function fn_emacs {
 	emacsclient "$1" --alternate-editor /Applications/Emacs.app/Contents/MacOS/Emacs 2>/dev/null &
 }
 
+function dkrRun {
+  docker run -it --rm --entrypoint $1 $2
+}
+
+#Download latest jvmci
+function dl-gb-jvmci {
+    local jdk=$1
+    if [[ "$1" == "11" ]]; then
+        url=`curl --silent "https://api.github.com/repos/graalvm/labs-openjdk-11/releases/latest" | jq -r ".assets|.[].browser_download_url"|fzf`
+    else 
+        url=`curl --silent "https://api.github.com/repos/graalvm/openjdk8-jvmci-builder/releases/latest" | jq -r ".assets|.[].browser_download_url"|fzf`
+    fi
+    echo Downloading $url
+    curl -L -s $url | tar -xvf - -C ~/bin/graalvm
+
+}
+
+#Diff two strings 
+function diff_strs {
+    diff <(echo "$1") <(echo "$2")
+}
+
 if which pyenv-virtualenv-init > /dev/null; then
     eval "$(pyenv init -)";
     eval "$(pyenv virtualenv-init -)";
 fi
 
 #Aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 alias fbn="find . -name "
 alias idiff="idea diff "
 alias gw="./gradlew"
-alias jxrx="/Users/eginez/repos/JXrx/build/install/JXrx-shadow/bin/JXrx"
 alias ownusr="sudo chown -R `whoami` /usr/local/bin && sudo chown -R `whoami` /usr/local/lib"
 alias memacs="fn_emacs"
 alias em="fn_emacs"
+alias kct="kubectl"
 
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
