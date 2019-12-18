@@ -1,62 +1,18 @@
 # If you come from bash you might have to change your $PATH.
 export GOPATH=/Users/eginez/repos/goland
 export PATH=$HOME/bin:/usr/local/bin:$PATH:$GOPATH/bin
+export PATH=$PATH:$HOME/src/mx
 export NO_JAVA_PATH=$PATH
 
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/eginez/.oh-my-zsh
-
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git python go)
-
+plugins=(git)
 source $ZSH/oh-my-zsh.sh
+
+export EDITOR=vim
+export KEYTIMEOUT=1
 
 # User configuration
 #History saving
@@ -69,8 +25,6 @@ setopt HIST_SAVE_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt SHARE_HISTORY
 setopt auto_cd
-#set cdpath to a meaningful locations, this allows to access and autocomplete as if it was a root directory
-#cdpath=($HOME/src)
 
 #Vim mode
 bindkey -v
@@ -89,52 +43,32 @@ bindkey '^w' backward-kill-word
 # ctrl-r starts searching history backward
 bindkey '^r' history-incremental-search-backward
 
-function zle-line-init zle-keymap-select {
-    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
-    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$EPS1"
-    zle reset-prompt
-}
-
-zle -N zle-line-init
-zle -N zle-keymap-select
-export KEYTIMEOUT=1
-
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
+#function zle-line-init zle-keymap-select {
+#    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
+#    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$EPS1"
+#    zle reset-prompt
+#}
 #
+#zle -N zle-line-init
+#zle -N zle-keymap-select
 
 
 # fzf keybindings
 # https://github.com/junegunn/fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-function mysplit() {
-    python -c "import sys; all=sys.stdin.read().split('$1'); print '\n'.join(str(p) for p in all)"
+#Diff two strings 
+function diff_strs {
+    diff <(echo "$1") <(echo "$2")
 }
 
-function gohome() {
-    export GOPATH=`pwd`
+#if which pyenv-virtualenv-init > /dev/null; then
+#    eval "$(pyenv init -)";
+#    eval "$(pyenv virtualenv-init -)";
+#fi
+
+function mysplit() {
+    python -c "import sys; all=sys.stdin.read().split('$1'); print '\n'.join(str(p) for p in all)"
 }
 
 function fn_emacs {
@@ -145,7 +79,17 @@ function dkrRun {
   docker run -it --rm --entrypoint $1 $2
 }
 
-#Download latest jvmci
+
+#Chnages jdk for the current terminal session
+#Relies on the $NO_JAVA_PATH env var
+function changejdk {
+  local newfile=~/bin/graalvm/`cd ~/bin/graalvm && ls |fzf`
+  export JAVA_HOME=$newfile/Contents/Home
+  export PATH=$JAVA_HOME/bin:$NO_JAVA_PATH
+  java -version && native-image --version
+}
+
+#Download latest jvmci from github
 function dl-gb-jvmci {
     local jdk=$1
     if [[ "$1" == "11" ]]; then
@@ -158,15 +102,36 @@ function dl-gb-jvmci {
 
 }
 
-#Diff two strings 
-function diff_strs {
-    diff <(echo "$1") <(echo "$2")
+#Downloads the latest graal from github
+function dl-gb-graal {
+    local url=`curl --silent "https://api.github.com/repos/graalvm/graalvm-ce-builds/releases/latest" | jq -r ".assets|.[].browser_download_url"|fzf`
+    echo Downloading $url
+    curl -L -s $url | tar -xvf - -C ~/bin/graalvm
 }
 
-if which pyenv-virtualenv-init > /dev/null; then
-    eval "$(pyenv init -)";
-    eval "$(pyenv virtualenv-init -)";
-fi
+#Set extras for graal build
+function setextra {
+  local newfile=~/bin/graalvm/`cd ~/bin/graalvm && ls |fzf`
+  export EXTRA_JAVA_HOMES=$newfile/Contents/Home
+}
+
+function graaldev {
+    jdk=`{ ls -d ~/src/graal-workspace/graal/vm/latest_graalvm/* ; ls -d ~/src/graal-workspace2/graal/vm/latest_graalvm/* } | fzf`
+    echo $jdk
+    export JAVA_HOME=$jdk/Contents/Home
+    export PATH=$JAVA_HOME/bin:$NO_JAVA_PATH
+    export PATH=~/src/graal/substratevm/svmbuild/vm/bin:$PATH
+    java -version && native-image --version
+}
+
+function mxgit {
+    (
+        local p=${2:-}
+        cd ~/src/graal-workspace$p
+        ls -1 |xargs -I% sh -c "cd % && echo === `pwd` === && $1"
+    )
+}
+
 
 #Aliases
 alias fbn="find . -name "
@@ -178,7 +143,7 @@ alias em="fn_emacs"
 alias kct="kubectl"
 
 #source not exposable functions
-[ -f ~/.private.zsh ] && source ~/.private.zsh
+[ -f ~/.private.zshrc ] && source ~/.private.zshrc
 
 
 

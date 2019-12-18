@@ -5,7 +5,7 @@ read
 echo "installing tools"
 brew install zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-brew install fzf diff-so-fancy
+brew install macvim fzf diff-so-fancy jq
 
 #Create directories
 mkdir -p ~/.vim.backup
