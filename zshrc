@@ -177,6 +177,10 @@ alias memacs="fn_emacs"
 alias em="fn_emacs"
 alias kct="kubectl"
 
+#source not exposable functions
+[ -f ~/.private.zsh ] && source ~/.private.zsh
+
+
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
