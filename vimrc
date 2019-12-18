@@ -108,8 +108,15 @@ function! s:check_back_space() abort
 endfunction
 "
 "Solarized
-set background=dark
-colorscheme solarized
+if has("gui_running")
+	set guifont=Monaco:h10
+    set background=dark
+    colorscheme solarized
+else
+    let g:solarized_termcolors=256
+    colorscheme solarized
+	set guifont=Monospace\ 8
+endif
 
 "java autocomplete
 autocmd FileType java setlocal omnifunc=javacomplete#Complete
