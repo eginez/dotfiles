@@ -3,6 +3,7 @@ export GOPATH=/Users/eginez/repos/goland
 export PATH=$HOME/bin:/usr/local/bin:$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/src/mx
 export NO_JAVA_PATH=$PATH
+export HOMEBREW_NO_AUTO_UPDATE=1
 
 
 # Path to your oh-my-zsh installation.
@@ -125,10 +126,32 @@ function graaldev {
 }
 
 function mxgit {
+    GREEN='\033[0;32m'
+    RED='\033[0;31m'
+    NC='\033[0m'
     (
-        local p=${2:-}
-        cd ~/src/graal-workspace$p
-        ls -1 |xargs -I% sh -c "cd % && echo === `pwd` === && $1"
+        while [ true ];
+        do
+            if [[ `pwd` = "/" ]]; then
+                echo Can not find workspace root
+                return
+            fi
+            if [[ -f .graalworkspace ]]; then
+                break
+            fi
+            cd ../
+        done
+
+        root=`pwd`
+        echo "$RED On workspace $root $NC"
+        for repo in $(find `pwd` -depth 1 -type d)
+        do
+            cd $repo
+            echo "$GREEN============`pwd`==================$NC"
+            $@
+        done
+
+        #ls -1 |xargs -I% sh -c "cd % && echo === `pwd` === && $1"
     )
 }
 
