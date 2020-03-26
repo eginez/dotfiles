@@ -4,10 +4,11 @@ if [[ "$OSTYPE" == "darwin*" ]]; then
     echo "have you install brew yet??(Ctrl+C to quit)"
     read
     echo "installing tools"
-    brew install zsh
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    brew install macvim fzf diff-so-fancy jq ripgrep
+    brew install zsh macvim fzf diff-so-fancy jq ripgrep
 fi
+
+#Install oh-my-zsh
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 #Create directories
 mkdir -p ~/.vim.backup
