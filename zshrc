@@ -7,7 +7,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/eginez/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh

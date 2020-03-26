@@ -1,7 +1,7 @@
 #! /bin/bash
 
 if [[ "$OSTYPE" == "darwin*" ]]; then
-    echo "have you install brew yet??(Ctrl+C to quit)"
+    echo "have you installed brew yet??(Ctrl+C to quit)"
     read
     echo "installing tools"
     brew install zsh macvim fzf diff-so-fancy jq ripgrep
@@ -16,6 +16,7 @@ mkdir -p ~/.vim
 
 
 echo "Creating zshrc file"
+rm -rf ~/.zshrc
 ln -s `pwd -P`/zshrc ~/.zshrc
 
 echo "Creating vimrc file"
