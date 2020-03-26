@@ -90,6 +90,25 @@ function changejdk {
   java -version && native-image --version
 }
 
+#Sets up the jvmci jdk java home in order to build graal
+function autojvmci {
+    jdk11=$(ls -t ~/bin/graalvm | grep jvmci |grep 11|head -n 1)
+    jdk8=$(ls -t ~/bin/graalvm | grep jvmci |grep 8|head -n 1)
+
+    if [[ $1 == "8" ]] then
+        export JAVA_HOME=~/bin/graalvm/$jdk8/Contents/Home
+        export EXTRA_JAVA_HOMES=~/bin/graalvm/$jdk11/Contents/Home
+    else
+        export JAVA_HOME=~/bin/graalvm/$jdk11/Contents/Home
+        export EXTRA_JAVA_HOMES=~/bin/graalvm/$jdk8/Contents/Home
+    fi
+    export PATH=$JAVA_HOME/bin:$NO_JAVA_PATH
+
+    echo JDK: $JAVA_HOME
+    echo EXTRA: $EXTRA_JAVA_HOMES
+    java -version
+}
+
 #Download latest jvmci from github
 function dl-gb-jvmci {
     local jdk=$1
@@ -110,11 +129,6 @@ function dl-gb-graal {
     curl -L -s $url | tar -xvf - -C ~/bin/graalvm
 }
 
-#Set extras for graal build
-function setextra {
-  local newfile=~/bin/graalvm/`cd ~/bin/graalvm && ls |fzf`
-  export EXTRA_JAVA_HOMES=$newfile/Contents/Home
-}
 
 function graaldev {
     jdk=`{ ls -d ~/src/graal-workspace/graal/vm/latest_graalvm/* ; ls -d ~/src/graal-workspace2/graal/vm/latest_graalvm/* } | fzf`

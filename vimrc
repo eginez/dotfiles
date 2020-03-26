@@ -9,7 +9,7 @@ map <leader>n :NERDTreeToggle<CR>
 set guioptions=-T
 set guioptions=-b
 if has("gui_macvim")
-	set guifont=Monaco:h10
+	set guifont=Monaco:h12
 else
 	set guifont=Monospace\ 8
 endif

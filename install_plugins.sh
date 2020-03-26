@@ -1,11 +1,13 @@
 #! /bin/bash
 
-echo "have you install brew yet??(Ctrl+C to quit)"
-read
-echo "installing tools"
-brew install zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-brew install macvim fzf diff-so-fancy jq ripgrep
+if [[ "$OSTYPE" == "darwin*" ]]; then
+    echo "have you install brew yet??(Ctrl+C to quit)"
+    read
+    echo "installing tools"
+    brew install zsh
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    brew install macvim fzf diff-so-fancy jq ripgrep
+fi
 
 #Create directories
 mkdir -p ~/.vim.backup
