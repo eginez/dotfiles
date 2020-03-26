@@ -81,14 +81,22 @@ function dkrRun {
 }
 
 
+function javaBinLocation {
+    export JAVA_BIN_LOCATION=
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        export JAVA_BIN_LOCATION=Contents/Home
+    fi
+}
+#
 #Chnages jdk for the current terminal session
 #Relies on the $NO_JAVA_PATH env var
 function changejdk {
   local newfile=~/bin/graalvm/`cd ~/bin/graalvm && ls |fzf`
-  export JAVA_HOME=$newfile/Contents/Home
+  export JAVA_HOME=$newfile/$JAVA_BIN_LOCATION
   export PATH=$JAVA_HOME/bin:$NO_JAVA_PATH
   java -version && native-image --version
 }
+
 
 #Sets up the jvmci jdk java home in order to build graal
 function autojvmci {
@@ -96,11 +104,11 @@ function autojvmci {
     jdk8=$(ls -t ~/bin/graalvm | grep jvmci |grep 8|head -n 1)
 
     if [[ $1 == "8" ]] then
-        export JAVA_HOME=~/bin/graalvm/$jdk8/Contents/Home
-        export EXTRA_JAVA_HOMES=~/bin/graalvm/$jdk11/Contents/Home
+        export JAVA_HOME=~/bin/graalvm/$jdk8/$JAVA_BIN_LOCATION
+        export EXTRA_JAVA_HOMES=~/bin/graalvm/$jdk11/$JAVA_BIN_LOCATION
     else
-        export JAVA_HOME=~/bin/graalvm/$jdk11/Contents/Home
-        export EXTRA_JAVA_HOMES=~/bin/graalvm/$jdk8/Contents/Home
+        export JAVA_HOME=~/bin/graalvm/$jdk11/$JAVA_BIN_LOCATION
+        export EXTRA_JAVA_HOMES=~/bin/graalvm/$jdk8/$JAVA_BIN_LOCATION
     fi
     export PATH=$JAVA_HOME/bin:$NO_JAVA_PATH
 
@@ -133,7 +141,7 @@ function dl-gb-graal {
 function graaldev {
     jdk=`{ ls -d ~/src/graal-workspace/graal/vm/latest_graalvm/* ; ls -d ~/src/graal-workspace2/graal/vm/latest_graalvm/* } | fzf`
     echo $jdk
-    export JAVA_HOME=$jdk/Contents/Home
+    export JAVA_HOME=$jdk/$JAVA_BIN_LOCATION
     export PATH=$JAVA_HOME/bin:$NO_JAVA_PATH
     export PATH=~/src/graal/substratevm/svmbuild/vm/bin:$PATH
     java -version && native-image --version
@@ -178,6 +186,7 @@ alias ownusr="sudo chown -R `whoami` /usr/local/bin && sudo chown -R `whoami` /u
 alias memacs="fn_emacs"
 alias em="fn_emacs"
 alias kct="kubectl"
+javaBinLocation
 
 #source not exposable functions
 [ -f ~/.private.zshrc ] && source ~/.private.zshrc
