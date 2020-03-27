@@ -2,10 +2,6 @@
 export GOPATH=/Users/eginez/repos/goland
 export PATH=$HOME/bin:/usr/local/bin:$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/src/mx
-# fzf keybindings
-# https://github.com/junegunn/fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export NO_JAVA_PATH=$PATH
 export HOMEBREW_NO_AUTO_UPDATE=1
 
 
@@ -56,6 +52,11 @@ bindkey '^r' history-incremental-search-backward
 #zle -N zle-line-init
 #zle -N zle-keymap-select
 
+
+# fzf keybindings
+# https://github.com/junegunn/fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export NO_JAVA_PATH=$PATH
 
 #Diff two strings 
 function diff_strs {
