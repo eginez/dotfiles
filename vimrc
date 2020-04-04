@@ -89,6 +89,8 @@ Plug 'davidhalter/jedi-vim'
 " Initialize plugin system
 call plug#end()
 nnoremap <C-o> :FZF<CR>
+let g:airline#extensions#tabline#enabled = 1
+
 
 "---- ctags ----"
 set tags=./tags;            " Look for tag file all the way up to root.
