@@ -170,7 +170,7 @@ function mxgit {
         do
             cd $repo
             echo "$GREEN============`pwd`==================$NC"
-            $@
+            sh -c "$@"
         done
 
         #ls -1 |xargs -I% sh -c "cd % && echo === `pwd` === && $1"
