@@ -78,11 +78,12 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'micha/vim-colors-solarized'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline'
-Plug 'artur-shaik/vim-javacomplete2'
+"Plug 'artur-shaik/vim-javacomplete2'
 Plug 'mhinz/vim-startify'
-Plug 'davidhalter/jedi-vim'
+"Plug 'davidhalter/jedi-vim'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 
 
 
@@ -113,7 +114,7 @@ endfunction
 "Solarized
 if has("gui_running")
 	set guifont=Monaco:h10
-    set background=dark
+    set background=light
     colorscheme solarized
 else
     let g:solarized_termcolors=256
