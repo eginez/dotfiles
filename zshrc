@@ -1,11 +1,14 @@
 # If you come from bash you might have to change your $PATH.
-export GOPATH=/Users/eginez/repos/goland
 export PATH=$HOME/bin:/usr/local/bin:$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/src/mx
 export HOMEBREW_NO_AUTO_UPDATE=1
 
 
 # Path to your oh-my-zsh installation.
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 export ZSH=~/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 plugins=(git)

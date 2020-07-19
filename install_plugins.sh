@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if [[ "$(uname -s)" == "Darwin*" ]]; then
+if [[ "$(uname -s)" == "Darwin" ]]; then
     echo "have you installed brew yet??(Ctrl+C to quit)"
     read
     echo "installing tools"
