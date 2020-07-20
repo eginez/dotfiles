@@ -8,7 +8,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 export ZSH=~/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 plugins=(git)
@@ -31,17 +31,6 @@ setopt auto_cd
 
 #Vim mode
 bindkey -v
-# Use vim cli mode
-bindkey '^P' up-history
-bindkey '^N' down-history
-
-# backspace and ^h working even after
-# returning from command mode
-bindkey '^?' backward-delete-char
-bindkey '^h' backward-delete-char
-
-# ctrl-w removed word backwards
-bindkey '^w' backward-kill-word
 
 # ctrl-r starts searching history backward
 bindkey '^r' history-incremental-search-backward

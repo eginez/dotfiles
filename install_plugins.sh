@@ -25,6 +25,9 @@ ln -s `pwd -P`/vimrc ~/.vimrc
 echo "Creating gitconfig file"
 ln -s `pwd -P`/gitconfig ~/.gitconfig
 
+echo "Installing fzf key integration"
+$(brew --prefix)/opt/fzf/install
+
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
