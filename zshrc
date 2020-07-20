@@ -10,7 +10,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 export ZSH=~/.oh-my-zsh
-ZSH_THEME="robbyrussell"
+ZSH_THEME="lambda-color"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 

@@ -19,6 +19,9 @@ echo "Creating zshrc file"
 rm -rf ~/.zshrc
 ln -s `pwd -P`/zshrc ~/.zshrc
 
+echo "Adding custom theme for zsh"
+ln -s `pwd -P`/lambda-color.zsh-theme ~/.oh-my-zsh/custom/themes/lambda-color.zsh-theme
+
 echo "Creating vimrc file"
 ln -s `pwd -P`/vimrc ~/.vimrc
 
