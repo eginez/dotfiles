@@ -4,7 +4,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     echo "have you installed brew yet??(Ctrl+C to quit)"
     read
     echo "installing tools"
-    brew install zsh macvim fzf diff-so-fancy jq ripgrep
+    brew install zsh macvim fzf diff-so-fancy jq ripgrep tree
 fi
 
 #Install oh-my-zsh
