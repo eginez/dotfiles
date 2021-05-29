@@ -72,6 +72,15 @@ function dkrRun {
   docker run -it --rm --entrypoint $1 $2
 }
 
+function did() {
+    if [[ $@ == '' ]]; then
+        cid=$(docker ps|fzf|cut -d' ' -f1)
+    else
+        cid=$(docker ps -q --filter "name=$@")
+    fi
+    echo $cid
+}
+
 
 
 #Aliases
@@ -82,6 +91,7 @@ alias ownusr="sudo chown -R `whoami` /usr/local/bin && sudo chown -R `whoami` /u
 alias memacs="fn_emacs"
 alias em="fn_emacs"
 alias kct="kubectl"
+alias c=cd
 
 #source not exposable functions
 [ -f ~/.private.zshrc ] && source ~/.private.zshrc
