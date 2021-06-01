@@ -32,17 +32,15 @@ setopt auto_cd
 #Vim mode
 bindkey -v
 
+## Start command prompt in normal mode
+zle-line-init() {
+    zle -K vicmd;
+}
+zle -N zle-line-init
+
 # ctrl-r starts searching history backward
 bindkey '^r' history-incremental-search-backward
 
-#function zle-line-init zle-keymap-select {
-#    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
-#    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$EPS1"
-#    zle reset-prompt
-#}
-#
-#zle -N zle-line-init
-#zle -N zle-keymap-select
 
 
 # fzf keybindings
@@ -54,11 +52,6 @@ export NO_JAVA_PATH=$PATH
 function diff_strs {
     diff <(echo "$1") <(echo "$2")
 }
-
-#if which pyenv-virtualenv-init > /dev/null; then
-#    eval "$(pyenv init -)";
-#    eval "$(pyenv virtualenv-init -)";
-#fi
 
 function mysplit() {
     python -c "import sys; all=sys.stdin.read().split('$1'); print '\n'.join(str(p) for p in all)"
@@ -101,6 +94,4 @@ alias c=cd
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/eginez/.sdkman"
-[[ -s "/Users/eginez/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/eginez/.sdkman/bin/sdkman-init.sh"
+
