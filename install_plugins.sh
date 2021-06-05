@@ -28,6 +28,10 @@ ln -s `pwd -P`/vimrc ~/.vimrc
 echo "Creating gitconfig file"
 ln -s `pwd -P`/gitconfig ~/.gitconfig
 
+echo "Creating tmux config file"
+ln -s `pwd -P`/tmux.conf ~/.tmux.conf
+
+
 echo "Installing fzf key integration"
 $(brew --prefix)/opt/fzf/install
 
