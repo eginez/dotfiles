@@ -32,12 +32,6 @@ setopt auto_cd
 #Vim mode
 bindkey -v
 
-## Start command prompt in normal mode
-zle-line-init() {
-    zle -K vicmd;
-}
-zle -N zle-line-init
-
 # ctrl-r starts searching history backward
 bindkey '^r' history-incremental-search-backward
 
@@ -92,6 +86,9 @@ alias c=cd
 
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+export SDKMAN_DIR="/Users/$USER/.sdkman"
+[[ -s "/Users/$USER/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/$USER/.sdkman/bin/sdkman-init.sh"
 
 
 
