@@ -24,6 +24,10 @@ ln -s `pwd -P`/lambda-color.zsh-theme ~/.oh-my-zsh/custom/themes/lambda-color.zs
 
 echo "Adding power10k"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+ln -s `pwd -P`/p10k.zsh ~/.p10k.zsh
+
+echo "Adding better zsh vim mode"
+git clone https://github.com/jeffreytse/zsh-vi-mode $ZSH/custom/plugins/zsh-vi-mode
 
 echo "Creating vimrc file"
 ln -s `pwd -P`/vimrc ~/.vimrc
