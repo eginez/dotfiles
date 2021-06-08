@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/src/mx
@@ -10,8 +17,10 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 export ZSH=~/.oh-my-zsh
-ZSH_THEME="lambda-color"
+#ZSH_THEME="lambda-color"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(git)
+plugins+=(zsh-vi-mode)
 source $ZSH/oh-my-zsh.sh
 
 export EDITOR=vim
@@ -40,6 +49,10 @@ bindkey '^r' history-incremental-search-backward
 # fzf keybindings
 # https://github.com/junegunn/fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# The plugin will auto execute this zvm_after_init function
+function zvm_after_init() {
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+}
 export NO_JAVA_PATH=$PATH
 
 #Diff two strings 
@@ -91,4 +104,5 @@ export SDKMAN_DIR="/Users/$USER/.sdkman"
 [[ -s "/Users/$USER/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/$USER/.sdkman/bin/sdkman-init.sh"
 
 
-
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
