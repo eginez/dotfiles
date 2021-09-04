@@ -5,6 +5,8 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     read
     echo "installing tools"
     brew install zsh macvim fzf diff-so-fancy jq ripgrep tree
+else
+	apt-get install -y zsh fzf diff-so-fancy jq ripgrep tree
 fi
 
 #Install oh-my-zsh
@@ -40,7 +42,9 @@ ln -s `pwd -P`/tmux.conf ~/.tmux.conf
 
 
 echo "Installing fzf key integration"
-$(brew --prefix)/opt/fzf/install
+if [[ "$(uname -s)" == "Darwin" ]]; then
+	$(brew --prefix)/opt/fzf/install
+fi
 
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
