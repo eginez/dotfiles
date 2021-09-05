@@ -70,8 +70,7 @@ au Syntax clojure RainbowParenthesesLoadBraces
 "Fireplace-Clojure
 map <C-E> :Eval<CR>
 
-"
-
+" Initialize plugin system
 call plug#begin('~/.vim/plugged')
 set rtp+=/usr/local/bin/fzf
 Plug '/usr/local/opt/fzf'
@@ -84,11 +83,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 "Plug 'davidhalter/jedi-vim'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-
-
-
-" Initialize plugin system
 call plug#end()
+
 nnoremap <C-o> :FZF<CR>
 let g:airline#extensions#tabline#enabled = 1
 
@@ -113,13 +109,13 @@ endfunction
 "
 "Solarized
 if has("gui_running")
-	set guifont=Monaco:h10
+    set guifont=Monaco:h10
     set background=light
-    colorscheme solarized
+    silent! colorscheme solarized
 else
     let g:solarized_termcolors=256
-    colorscheme solarized
-	set guifont=Monospace\ 8
+    silent! colorscheme solarized
+    set guifont=Monospace\ 8
 endif
 
 "java autocomplete

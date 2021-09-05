@@ -1,13 +1,18 @@
 #! /bin/bash
+set -u  # die on undeclared vars
+set -o pipefail # die on pipe failures
+set -e #die on error
+
+DWL="apt-get install -y vim zsh fzf jq ripgrep tree"
+DWNL_DARWIN="brew install zsh macvim fzf diff-so-fancy jq ripgrep tree"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
-    echo "have you installed brew yet??(Ctrl+C to quit)"
-    read
-    echo "installing tools"
-    brew install zsh macvim fzf diff-so-fancy jq ripgrep tree
-else
-	apt-get install -y zsh fzf diff-so-fancy jq ripgrep tree
+	DWL=$DWNL_DARWIN
 fi
+
+# Download software
+echo "Downloading software..."
+$DWL
 
 #Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -29,7 +34,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 ln -s `pwd -P`/p10k.zsh ~/.p10k.zsh
 
 echo "Adding better zsh vim mode"
-git clone https://github.com/jeffreytse/zsh-vi-mode $ZSH/custom/plugins/zsh-vi-mode
+git clone https://github.com/jeffreytse/zsh-vi-mode ${ZSH:-$HOME}/custom/plugins/zsh-vi-mode
 
 echo "Creating vimrc file"
 ln -s `pwd -P`/vimrc ~/.vimrc
@@ -51,4 +56,6 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 
 echo "Start vim and execute :PlugInstall"
+## vim -u plugins.vim  +PlugInstall +qall  # Install plugins only
+vim +PlugInstall +qall
 
