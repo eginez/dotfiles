@@ -19,8 +19,8 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 export ZSH=~/.oh-my-zsh
 #ZSH_THEME="lambda-color"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git)
-plugins+=(zsh-vi-mode)
+#plugins=(git)
+#plugins+=(zsh-vi-mode)
 source $ZSH/oh-my-zsh.sh
 
 export EDITOR=vim
@@ -37,6 +37,8 @@ setopt HIST_SAVE_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt SHARE_HISTORY
 setopt auto_cd
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit && compinit
 
 #Vim mode
 bindkey -v
@@ -74,7 +76,7 @@ function dkrRun {
 
 function did() {
     if [[ $@ == '' ]]; then
-        cid=$(docker ps|fzf|cut -d' ' -f1)
+        cid=$(docker ps|fzf -m|cut -d' ' -f1)
     else
         cid=$(docker ps -q --filter "name=$@")
     fi
