@@ -1,12 +1,17 @@
 [user]
-	email = eginez@gmail.com
+	email = 175813+eginez@users.noreply.github.com
 	name = Esteban Ginez.
 [alias]
-  s = status
-  co = checkout
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-  cmd = commit --amend
-  prb = pull --rebase
+  	s = status
+  	co = checkout
+  	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  	cmd = commit --amend
+  	prb = pull --rebase
+  	recent = for-each-ref --sort=-committerdate --count=10 --format='%(color:green)%(refname:short) %(color:red)%(committerdate:relative)%(color:reset)' refs/heads/eginez
+  	recent-all = for-each-ref --sort=-committerdate --format='%(color:green)%(refname:short) %(color:red)%(committerdate:relative)%(color:reset)' refs/heads/eginez
+
 [core]
 	excludesfile = ~/globalgitignore
 	pager = diff-so-fancy | less --tabs=4 -RFX
+[init]
+	defaultBranch = main
