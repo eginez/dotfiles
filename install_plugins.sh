@@ -3,7 +3,7 @@ set -u  # die on undeclared vars
 set -o pipefail # die on pipe failures
 set -e #die on error
 
-DWL="apt-get install -y vim zsh fzf jq ripgrep tree"
+DWL="sudo apt-get install -y vim zsh fzf jq ripgrep tree"
 DWNL_DARWIN="brew install zsh macvim fzf diff-so-fancy jq ripgrep tree"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
