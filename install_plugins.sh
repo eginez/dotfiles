@@ -4,7 +4,10 @@ set -o pipefail # die on pipe failures
 set -e #die on error
 
 DWL="sudo apt-get install -y vim zsh fzf jq ripgrep tree"
-DWNL_DARWIN="brew install zsh macvim fzf diff-so-fancy jq ripgrep tree"
+## missing ccls in linux
+## snap install --classic cls
+
+DWNL_DARWIN="brew install zsh macvim fzf diff-so-fancy jq ripgrep tree ccls"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	DWL=$DWNL_DARWIN
@@ -58,4 +61,5 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 echo "Start vim and execute :PlugInstall"
 ## vim -u plugins.vim  +PlugInstall +qall  # Install plugins only
 vim +PlugInstall +qall
+vim +CocInstall coc-json coc-tsserver
 

@@ -1,0 +1,25 @@
+{
+    "languageserver":
+    {
+        "zig": {
+            "command": "zls",
+            "filetypes": [
+                "zig"
+            ]
+        },
+        "ccls": {
+            "command": "ccls",
+            "args": ["--log-file=/tmp/ccls.log", "-v=1"],
+            "filetypes": ["c", "cpp", "objc", "c++"],
+            "rootPatterns": [".ccls", "compile_commands.json", ".git/"],
+            "initializationOptions": {
+                "cache": {
+                    "directory": "~/.ccls"
+                },
+                "client": {
+                    "snippetSupport": true
+                }
+            }
+        }
+    }
+}

@@ -77,7 +77,7 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'micha/vim-colors-solarized'
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline'
 "Plug 'artur-shaik/vim-javacomplete2'
 Plug 'mhinz/vim-startify'
