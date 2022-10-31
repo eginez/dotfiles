@@ -110,7 +110,7 @@ endfunction
 "Solarized
 if has("gui_running")
     set guifont=Monaco:h10
-    set background=light
+    set background=dark
     silent! colorscheme solarized
 else
     let g:solarized_termcolors=256
