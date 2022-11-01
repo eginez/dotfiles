@@ -6,6 +6,8 @@ map <C-L> :tabnext<CR>
 map <C-H> :tabprevious<CR>
 map <C-K> :tabnew<CR>
 map <leader>n :NERDTreeToggle<CR>
+" Delete backwards
+nnoremap dw vb"_d
 set guioptions=-T
 set guioptions=-b
 if has("gui_macvim")
