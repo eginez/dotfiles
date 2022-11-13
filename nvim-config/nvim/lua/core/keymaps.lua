@@ -6,6 +6,10 @@ local keymap = vim.keymap -- for conciseness
 ---------------------
 -- General Keymaps
 ---------------------
+vim.cmd("nore ; :")
+vim.cmd("cnoreabbrev W w")
+vim.cmd("cnoreabbrev Q q")
+keymap.set("n", "dw", 'vb"_d') -- delete word backwards
 
 -- use jk to exit insert mode
 keymap.set("i", "jk", "<ESC>")
