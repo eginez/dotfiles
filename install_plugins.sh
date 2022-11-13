@@ -7,7 +7,13 @@ DWL="sudo apt-get install -y vim zsh fzf jq ripgrep tree"
 ## missing ccls in linux
 ## snap install --classic cls
 
-DWNL_DARWIN="brew install zsh macvim fzf diff-so-fancy jq ripgrep tree ccls"
+if [[ USE_NVIM ]]; then
+  VIM=neovim
+else
+  VIM=macvim
+fi
+
+DWNL_DARWIN="brew install zsh $VIM fzf diff-so-fancy jq ripgrep tree ccls"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	DWL=$DWNL_DARWIN
@@ -54,12 +60,18 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 	$(brew --prefix)/opt/fzf/install
 fi
 
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+if [[ USE_NVIM ]]; then
+  echo "configuring nvim"
+  ln -s `pwd -P`/nvim-config/nvim ~/.config/nvim/
+  nvim +PackerSync +qall
+else
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 
-echo "Start vim and execute :PlugInstall"
-## vim -u plugins.vim  +PlugInstall +qall  # Install plugins only
-vim +PlugInstall +qall
-vim +CocInstall coc-json coc-tsserver
+  echo "Start vim and execute :PlugInstall"
+  ## vim -u plugins.vim  +PlugInstall +qall  # Install plugins only
+  vim +PlugInstall +qall
+  vim +CocInstall coc-json coc-tsserver
+fi
 
