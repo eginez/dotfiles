@@ -13,7 +13,7 @@ else
   VIM=macvim
 fi
 
-DWNL_DARWIN="brew install zsh $VIM fzf diff-so-fancy jq ripgrep tree ccls"
+DWNL_DARWIN="brew install zsh $VIM fzf diff-so-fancy jq ripgrep tree ccls npm"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	DWL=$DWNL_DARWIN
@@ -62,7 +62,7 @@ fi
 
 if [[ USE_NVIM ]]; then
   echo "configuring nvim"
-  ln -s `pwd -P`/nvim-config/nvim ~/.config/nvim/
+  ln -s `pwd -P`/nvim-config/nvim ~/.config
   nvim +PackerSync +qall
 else
   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
