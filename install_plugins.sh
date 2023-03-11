@@ -13,7 +13,7 @@ else
   VIM=macvim
 fi
 
-DWNL_DARWIN="brew install zsh $VIM fzf diff-so-fancy jq ripgrep tree ccls npm"
+DWNL_DARWIN="brew install zsh $VIM fzf diff-so-fancy jq ripgrep tree ccls npm lua-language-server"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	DWL=$DWNL_DARWIN
