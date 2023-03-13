@@ -9,8 +9,8 @@ local keymap = vim.keymap -- for conciseness
 vim.cmd("nore ; :")
 vim.cmd("cnoreabbrev W w")
 vim.cmd("cnoreabbrev Q q")
-vim.cmd("nnoremap <leader>j <C-o>")
-vim.cmd("nnoremap <leader>l <C-i>")
+vim.cmd("nnoremap <D-j> <C-o>")
+vim.cmd("nnoremap <D-l> <C-i>")
 keymap.set("n", "dw", 'vb"_d') -- delete word backwards
 
 -- use jk to exit insert mode
@@ -48,8 +48,8 @@ keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window max
 keymap.set("n", "<leader>n", ":NvimTreeToggle<CR>") -- toggle file explorer
 
 -- telescope
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
-keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>") -- find string in current working directory as you type
+keymap.set("n", "<D-f>", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
+keymap.set("n", "<D-g>", "<cmd>Telescope live_grep<cr>") -- find string in current working directory as you type
 keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>") -- find string under cursor in current working directory
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>") -- list open buffers in current neovim instance
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>") -- list available help tags
