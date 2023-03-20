@@ -56,7 +56,8 @@
     time
     # =========================[ Line #2 ]=========================
     newline                   # \n
-    virtualenv                # python virtual environment
+    #virtualenv                # python virtual environment
+    conda
     prompt_char               # prompt symbol
   )
 
@@ -198,3 +199,8 @@ typeset -g POWERLEVEL9K_CONFIG_FILE=${${(%):-%x}:a}
 
 (( ${#p10k_config_opts} )) && setopt ${p10k_config_opts[@]}
 'builtin' 'unset' 'p10k_config_opts'
+
+function prompt_conda {
+  local env=`basename $CONDA_PREFIX`
+  p10k segment -f cyan -t $env
+}
