@@ -94,6 +94,7 @@ alias memacs="fn_emacs"
 alias em="fn_emacs"
 alias kct="kubectl"
 alias c=cd
+alias g=git
 
 #source not exposable functions
 [ -f ~/.private.zshrc ] && source ~/.private.zshrc

@@ -7,8 +7,8 @@
   	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
   	cmd = commit --amend
   	prb = pull --rebase
-  	recent = for-each-ref --sort=-committerdate --count=10 --format='%(color:green)%(refname:short) %(color:red)%(committerdate:relative)%(color:reset)' refs/heads/eginez
-  	recent-all = for-each-ref --sort=-committerdate --format='%(color:green)%(refname:short) %(color:red)%(committerdate:relative)%(color:reset)' refs/heads/eginez
+  	recent = for-each-ref --sort=-committerdate --count=10 --format='%(color:green)%(refname:short) %(color:red)%(committerdate:relative)%(color:reset)' refs/heads
+  	recent-all = for-each-ref --sort=-committerdate --format='%(color:green)%(refname:short) %(color:red)%(committerdate:relative)%(color:reset)' refs/heads
 
 [core]
 	excludesfile = /Users/eginez/.gitignore_global
