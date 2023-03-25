@@ -109,3 +109,28 @@ export SDKMAN_DIR="/Users/$USER/.sdkman"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+function git_conda_activate() {
+  # Activates a conda enviroment matching the name of the git repository
+    local git_repo=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [ -n "$git_repo" ]; then
+        local env_name=$(basename "$git_repo" | sed 's/[^[:alnum:]]/_/g')
+        conda activate "$env_name" 2>/dev/null || echo "No conda environment found for $env_name"
+    else
+        echo "Not a git repository"
+    fi
+}
+
+
+function git_conda_create() {
+  #Creates a conda enviroment matching the name of the repo
+    local git_repo=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [ -n "$git_repo" ]; then
+        local env_name=$(basename "$git_repo" | sed 's/[^[:alnum:]]/_/g')
+        conda create -n "$env_name" python=${1-3.11} && \
+        conda activate "$env_name"
+    else
+        echo "Not a git repository"
+    fi
+
+}
