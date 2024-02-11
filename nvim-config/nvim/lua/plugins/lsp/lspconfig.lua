@@ -82,6 +82,11 @@ lspconfig["pyright"].setup({
   on_attach = on_attach,
 })
 
+lspconfig["rust-analyzer"].setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
+
 -- configure css server
 lspconfig["cssls"].setup({
   capabilities = capabilities,
