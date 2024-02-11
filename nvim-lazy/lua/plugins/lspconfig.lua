@@ -9,5 +9,6 @@ return {
     --keys[#keys + 1] = { "K", false }
     -- add a keymap
     keys[#keys + 1] = { "<D-k>", "<cmd>lua vim.lsp.buf.declaration()<cr>" }
+    keys[#keys + 1] = { "<D-i>", "<cmd>lua vim.lsp.buf.references()<cr>" }
   end,
 }
