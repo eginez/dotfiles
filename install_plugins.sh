@@ -8,15 +8,15 @@ DWL="sudo apt-get install -y vim zsh fzf jq ripgrep tree"
 ## snap install --classic cls
 
 if [[ USE_NVIM ]]; then
-	VIM=neovim
+  VIM=neovim
 else
-	VIM=macvim
+  VIM=macvim
 fi
 
 DWNL_DARWIN="brew install zsh $VIM fzf diff-so-fancy jq ripgrep tree ccls npm lua-language-server"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
-	DWL=$DWNL_DARWIN
+  DWL=$DWNL_DARWIN
 fi
 
 # Download software
@@ -55,19 +55,18 @@ ln -s $(pwd -P)/tmux.conf ~/.tmux.conf
 
 echo "Installing fzf key integration"
 if [[ "$(uname -s)" == "Darwin" ]]; then
-	$(brew --prefix)/opt/fzf/install
+  $(brew --prefix)/opt/fzf/install
 fi
 
 if [[ USE_NVIM ]]; then
-	echo "configuring nvim"
-	ln -s $(pwd -P)/nvim-lazy/nvim ~/.config
-	nvim +PackerSync +qall
+  echo "configuring nvim"
+  ln -s $(pwd -P)/nvim-lazy ~/.config/nvim
 else
-	curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-	echo "Start vim and execute :PlugInstall"
-	## vim -u plugins.vim  +PlugInstall +qall  # Install plugins only
-	vim +PlugInstall +qall
-	vim +CocInstall coc-json coc-tsserver
+  echo "Start vim and execute :PlugInstall"
+  ## vim -u plugins.vim  +PlugInstall +qall  # Install plugins only
+  vim +PlugInstall +qall
+  vim +CocInstall coc-json coc-tsserver
 fi
