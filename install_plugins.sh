@@ -3,7 +3,7 @@ set -u          # die on undeclared vars
 set -o pipefail # die on pipe failures
 set -e          #die on error
 
-DWL="sudo apt-get install -y vim zsh fzf jq ripgrep tree"
+DWL="sudo apt-get install -y zsh fzf jq ripgrep tree zip nodejs npm python3 python3-venv neovim"
 ## missing ccls in linux
 ## snap install --classic cls
 
