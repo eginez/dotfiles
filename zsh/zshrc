@@ -23,7 +23,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 #plugins+=(zsh-vi-mode)
 source $ZSH/oh-my-zsh.sh
 
-export EDITOR=vim
+export EDITOR=nvim
 export KEYTIMEOUT=1
 
 # User configuration
