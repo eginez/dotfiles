@@ -78,11 +78,12 @@ install_packages() {
     log_sub "Running: apt-get update"
     run_cmd sudo apt-get update -qq
 
-    log_sub "Running: apt-get install zsh neovim tmux fzf jq ripgrep btop npm ..."
+    log_sub "Running: apt-get install zsh tmux fzf jq ripgrep btop npm ..."
     run_cmd sudo apt-get install -y \
-      zsh neovim tmux curl wget git build-essential \
+      zsh tmux curl wget git build-essential \
       fzf jq ripgrep tree btop npm
 
+    _install_neovim_linux
     _install_lazygit_linux
     _install_nvtop_linux
     _install_diff_so_fancy_linux
@@ -118,6 +119,32 @@ _install_nvtop_linux() {
   log_sub "Running: apt-get install nvtop"
   run_cmd sudo apt-get install -y nvtop \
     || log_sub "nvtop not available in apt, skipping (install manually if needed)"
+}
+
+_install_neovim_linux() {
+  # Install latest Neovim from GitHub releases instead of apt
+  # Apt version is often too old for LazyVim plugins
+  local nvim_version
+  nvim_version=$(nvim --version 2>/dev/null | head -1 | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "")
+  if [[ -n "$nvim_version" ]]; then
+    log_sub "neovim already installed ($nvim_version), skipping"
+    return
+  fi
+
+  # Detect architecture (x86_64 or arm64/aarch64)
+  local arch="linux64"
+  [[ "$(uname -m)" == "aarch64" ]] && arch="linux-arm64"
+
+  log_sub "Downloading latest neovim for $arch from GitHub releases..."
+  run_download bash -c "
+    curl -Lo /tmp/nvim-${arch}.tar.gz \\
+      \"https://github.com/neovim/neovim/releases/latest/download/nvim-${arch}.tar.gz\"
+    sudo rm -rf /opt/nvim
+    sudo tar -C /opt -xzf /tmp/nvim-${arch}.tar.gz
+    sudo ln -sf /opt/nvim-${arch}/bin/nvim /usr/local/bin/nvim
+    rm /tmp/nvim-${arch}.tar.gz
+    echo \"    neovim installed to /usr/local/bin/nvim\"
+  "
 }
 
 _install_diff_so_fancy_linux() {
