@@ -1,33 +1,53 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# Enable Powerlevel10k instant prompt. Must stay at the top.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# If you come from bash you might have to change your $PATH.
-export PATH=/opt/homebrew/bin:/opt/:$HOME/bin:/usr/local/bin:$PATH:$GOPATH/bin:$HOME/.modular/bin/
-export PATH=$PATH:$HOME/src/mx
-export HOMEBREW_NO_AUTO_UPDATE=1
+# ─── OS Detection ─────────────────────────────────────────────────────────────
 
+is_macos() { [[ "$(uname -s)" == "Darwin" ]]; }
+is_linux() { [[ "$(uname -s)" == "Linux" ]]; }
 
-# Path to your oh-my-zsh installation.
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
+# ─── PATH ─────────────────────────────────────────────────────────────────────
+
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/.opencode/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"
+export PATH="$PATH:$HOME/.modular/bin"
+export PATH="$PATH:$HOME/src/mx"
+export PATH="$HOME/.pixi/bin:$PATH"
+
+if is_macos; then
+  export PATH="/opt/homebrew/bin:/opt/:$PATH"
+  export HOMEBREW_NO_AUTO_UPDATE=1
+fi
+
+# Ghostty sets TERM=xterm-ghostty which isn't in Ubuntu's terminfo database.
+# Force xterm-256color on Linux so keys (backspace, tab) work correctly.
+if is_linux; then
+  export TERM=xterm-256color
+fi
+
+# ─── Oh-My-Zsh ────────────────────────────────────────────────────────────────
+
 export ZSH=~/.oh-my-zsh
-#ZSH_THEME="lambda-color"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-#plugins=(git)
-#plugins+=(zsh-vi-mode)
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
 source $ZSH/oh-my-zsh.sh
 
-export EDITOR=nvim
-export KEYTIMEOUT=1
+# ─── Vi mode (must be after oh-my-zsh, which resets keybindings) ──────────────
 
-# User configuration
-#History saving
+bindkey -v
+
+bindkey '^r' history-incremental-search-backward
+
+# ─── Editor ───────────────────────────────────────────────────────────────────
+
+export EDITOR=nvim
+
+# ─── History ──────────────────────────────────────────────────────────────────
+
 HISTFILE=~/.zsh_history
 HISTSIZE=99999999999
 SAVEHIST=$HISTSIZE
@@ -36,101 +56,126 @@ setopt INC_APPEND_HISTORY
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt SHARE_HISTORY
+
+# ─── Keybindings ──────────────────────────────────────────────────────────────
+
 setopt auto_cd
+
+export KEYTIMEOUT=1
+
+# ─── Completions ──────────────────────────────────────────────────────────────
+
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
 
-#Vim mode
-bindkey -v
+# ─── fzf ──────────────────────────────────────────────────────────────────────
 
-# ctrl-r starts searching history backward
-bindkey '^r' history-incremental-search-backward
-
-
-
-# fzf keybindings
-# https://github.com/junegunn/fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# The plugin will auto execute this zvm_after_init function
-function zvm_after_init() {
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-}
-export NO_JAVA_PATH=$PATH
 
-#Diff two strings 
-function diff_strs {
-    diff <(echo "$1") <(echo "$2")
+# ─── Pixi ─────────────────────────────────────────────────────────────────────
+
+if command -v pixi &>/dev/null; then
+  eval "$(pixi completion --shell zsh)"
+fi
+
+# ─── Conda / Git helpers ──────────────────────────────────────────────────────
+
+function git_conda_activate() {
+  # Activate a conda/pixi env matching the name of the current git repo
+  local git_repo
+  git_repo=$(git rev-parse --show-toplevel 2>/dev/null)
+  if [[ -n "$git_repo" ]]; then
+    local env_name
+    env_name=$(basename "$git_repo" | sed 's/[^[:alnum:]]/_/g')
+    conda activate "$env_name" 2>/dev/null || echo "No conda environment found for $env_name"
+  else
+    echo "Not a git repository"
+  fi
+}
+
+function git_conda_create() {
+  # Create a conda env matching the name of the current git repo
+  local git_repo
+  git_repo=$(git rev-parse --show-toplevel 2>/dev/null)
+  if [[ -n "$git_repo" ]]; then
+    local env_name
+    env_name=$(basename "$git_repo" | sed 's/[^[:alnum:]]/_/g')
+    conda create -n "$env_name" python="${1:-3.11}" && conda activate "$env_name"
+  else
+    echo "Not a git repository"
+  fi
+}
+
+# ─── Docker helpers ───────────────────────────────────────────────────────────
+
+function dkrRun() {
+  docker run -it --rm --entrypoint "$1" "$2"
+}
+
+# Run a container with all GPUs exposed
+function dkrGpu() {
+  docker run -it --rm --gpus all "$@"
+}
+
+# Get container ID interactively (fzf) or by name
+function did() {
+  if [[ $# -eq 0 ]]; then
+    docker ps | fzf -m | cut -d' ' -f1
+  else
+    docker ps -q --filter "name=$*"
+  fi
+}
+
+# ─── Utility functions ────────────────────────────────────────────────────────
+
+function diff_strs() {
+  diff <(echo "$1") <(echo "$2")
 }
 
 function mysplit() {
-    python -c "import sys; all=sys.stdin.read().split('$1'); print '\n'.join(str(p) for p in all)"
+  python3 -c "import sys; parts=sys.stdin.read().split('$1'); print('\n'.join(str(p) for p in parts))"
 }
 
-function fn_emacs {
-	emacsclient "$1" --alternate-editor /Applications/Emacs.app/Contents/MacOS/Emacs 2>/dev/null &
-}
+# ─── Aliases ──────────────────────────────────────────────────────────────────
 
-function dkrRun {
-  docker run -it --rm --entrypoint $1 $2
-}
-
-function did() {
-    if [[ $@ == '' ]]; then
-        cid=$(docker ps|fzf -m|cut -d' ' -f1)
-    else
-        cid=$(docker ps -q --filter "name=$@")
-    fi
-    echo $cid
-}
-
-
-
-#Aliases
-alias fbn="find . -name "
-alias idiff="idea diff "
+alias fbn="find . -name"
 alias gw="./gradlew"
-alias ownusr="sudo chown -R `whoami` /usr/local/bin && sudo chown -R `whoami` /usr/local/lib"
-alias memacs="fn_emacs"
-alias em="fn_emacs"
-alias kct="kubectl"
 alias c=cd
 alias g=git
+alias kct=kubectl
 
-#source not exposable functions
-[ -f ~/.private.zshrc ] && source ~/.private.zshrc
+if is_linux; then
+  alias top=btop
+  alias gpu='watch -n1 nvidia-smi'
+fi
 
+if is_macos; then
+  alias ownusr="sudo chown -R \`whoami\` /usr/local/bin && sudo chown -R \`whoami\` /usr/local/lib"
 
+  function fn_emacs() {
+    emacsclient "$1" --alternate-editor /Applications/Emacs.app/Contents/MacOS/Emacs 2>/dev/null &
+  }
+  alias memacs="fn_emacs"
+  alias em="fn_emacs"
+fi
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# ─── Platform-specific integrations ──────────────────────────────────────────
 
-export SDKMAN_DIR="/Users/$USER/.sdkman"
-[[ -s "/Users/$USER/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/$USER/.sdkman/bin/sdkman-init.sh"
+if is_macos; then
+  # iTerm2 shell integration
+  test -e "${HOME}/.iterm2_shell_integration.zsh" \
+    && source "${HOME}/.iterm2_shell_integration.zsh"
 
+  # SDKMAN
+  export SDKMAN_DIR="$HOME/.sdkman"
+  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] \
+    && source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# ─── Private / local overrides ────────────────────────────────────────────────
+
+[[ -f ~/.private.zshrc ]] && source ~/.private.zshrc
+
+# ─── Prompt ───────────────────────────────────────────────────────────────────
+
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-function git_conda_activate() {
-  # Activates a conda enviroment matching the name of the git repository
-    local git_repo=$(git rev-parse --show-toplevel 2>/dev/null)
-    if [ -n "$git_repo" ]; then
-        local env_name=$(basename "$git_repo" | sed 's/[^[:alnum:]]/_/g')
-        conda activate "$env_name" 2>/dev/null || echo "No conda environment found for $env_name"
-    else
-        echo "Not a git repository"
-    fi
-}
-
-
-function git_conda_create() {
-  #Creates a conda enviroment matching the name of the repo
-    local git_repo=$(git rev-parse --show-toplevel 2>/dev/null)
-    if [ -n "$git_repo" ]; then
-        local env_name=$(basename "$git_repo" | sed 's/[^[:alnum:]]/_/g')
-        conda create -n "$env_name" python=${1-3.11} && \
-        conda activate "$env_name"
-    else
-        echo "Not a git repository"
-    fi
-
-}
