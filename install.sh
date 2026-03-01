@@ -132,7 +132,7 @@ _install_neovim_linux() {
   fi
 
   # Detect architecture (x86_64 or arm64/aarch64)
-  local arch="linux64"
+  local arch="linux-x86_64"
   [[ "$(uname -m)" == "aarch64" ]] && arch="linux-arm64"
 
   log_sub "Downloading latest neovim for $arch from GitHub releases..."
