@@ -179,3 +179,5 @@ fi
 # ─── Prompt ───────────────────────────────────────────────────────────────────
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export PATH="/home/eginez/.pixi/bin:$PATH"
