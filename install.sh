@@ -71,7 +71,7 @@ install_packages() {
 
   if is_macos; then
     run_cmd brew install \
-      zsh neovim fzf diff-so-fancy jq ripgrep tree \
+      zsh fzf diff-so-fancy jq ripgrep tree \
       ccls npm lua-language-server lazygit btop ghostty
 
   elif is_linux; then
@@ -83,7 +83,6 @@ install_packages() {
       zsh tmux curl wget git build-essential \
       fzf jq ripgrep tree btop npm
 
-    _install_neovim_linux
     _install_lazygit_linux
     _install_nvtop_linux
     _install_diff_so_fancy_linux
@@ -132,8 +131,12 @@ _install_neovim_linux() {
   fi
 
   # Detect architecture (x86_64 or arm64/aarch64)
-  local arch="linux-x86_64"
-  [[ "$(uname -m)" == "aarch64" ]] && arch="linux-arm64"
+  local arch
+  if [[ "$(uname -m)" == "x86_64" ]]; then
+    arch="linux-x86_64"
+  else
+    arch="linux-arm64"
+  fi
 
   log_sub "Downloading latest neovim for $arch from GitHub releases..."
   run_download bash -c "
@@ -243,7 +246,31 @@ install_tmux() {
 
 # ─── Neovim ───────────────────────────────────────────────────────────────────
 
+_install_neovim_macos() {
+  if command -v nvim &>/dev/null; then
+    log_sub "neovim already installed, skipping"
+    return
+  fi
+  log_sub "Downloading latest neovim for macOS (automatic arch detection)..."
+  run_download bash -c '
+    arch="macos-x86_64"
+    [[ "$(uname -m)" == "arm64" ]] && arch="macos-arm64"
+    curl -Lo /tmp/nvim-${arch}.tar.gz \
+      "https://github.com/neovim/neovim/releases/latest/download/nvim-${arch}.tar.gz"
+    sudo rm -rf /opt/nvim
+    sudo tar -C /opt -xzf /tmp/nvim-${arch}.tar.gz
+    sudo ln -sf /opt/nvim-'"$arch"'/bin/nvim /usr/local/bin/nvim
+    rm /tmp/nvim-${arch}.tar.gz
+    echo "    neovim installed to /usr/local/bin/nvim"
+  '
+}
+
 install_nvim() {
+  if is_macos; then
+    _install_neovim_macos
+  elif is_linux; then
+    _install_neovim_linux
+  fi
   log "Linking nvim config..."
   run_cmd mkdir -p "$HOME/.config"
   link_file "$DOTFILES/nvim" "$HOME/.config/nvim"
