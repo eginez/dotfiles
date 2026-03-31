@@ -71,7 +71,7 @@ install_packages() {
 
   if is_macos; then
     run_cmd brew install \
-      zsh fzf diff-so-fancy jq ripgrep tree \
+      zsh tmux fzf diff-so-fancy jq ripgrep tree \
       ccls npm lua-language-server lazygit btop ghostty
 
   elif is_linux; then
@@ -247,8 +247,10 @@ install_tmux() {
 # ─── Neovim ───────────────────────────────────────────────────────────────────
 
 _install_neovim_macos() {
-  if command -v nvim &>/dev/null; then
-    log_sub "neovim already installed, skipping"
+  local nvim_version
+  nvim_version=$(nvim --version 2>/dev/null | head -1 | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "")
+  if [[ -n "$nvim_version" ]]; then
+    log_sub "neovim already installed ($nvim_version), skipping"
     return
   fi
   log_sub "Downloading latest neovim for macOS (automatic arch detection)..."
@@ -257,11 +259,12 @@ _install_neovim_macos() {
     [[ "$(uname -m)" == "arm64" ]] && arch="macos-arm64"
     curl -Lo /tmp/nvim-${arch}.tar.gz \
       "https://github.com/neovim/neovim/releases/latest/download/nvim-${arch}.tar.gz"
-    sudo rm -rf /opt/nvim
-    sudo tar -C /opt -xzf /tmp/nvim-${arch}.tar.gz
-    sudo ln -sf /opt/nvim-'"$arch"'/bin/nvim /usr/local/bin/nvim
-    rm /tmp/nvim-${arch}.tar.gz
-    echo "    neovim installed to /usr/local/bin/nvim"
+    mkdir -p "$HOME/bin"
+    rm -rf "$HOME/bin/nvim-${arch}"
+    tar -xzf /tmp/nvim-${arch}.tar.gz -C "$HOME/bin"
+    ln -sf "$HOME/bin/nvim-${arch}/bin/nvim" "$HOME/bin/nvim"
+    rm -f /tmp/nvim-${arch}.tar.gz
+    echo "    neovim installed to $HOME/bin/nvim"
   '
 }
 
