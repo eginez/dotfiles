@@ -136,6 +136,48 @@ function mysplit() {
   python3 -c "import sys; parts=sys.stdin.read().split('$1'); print('\n'.join(str(p) for p in parts))"
 }
 
+# ─── Quick queries -o opencode, -c claude ─────────────────────────────────────
+
+qq() {
+  local harness="opencode"
+
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -o|--opencode)
+        harness="opencode"
+        shift
+        ;;
+      -c|--claude)
+        harness="claude"
+        shift
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
+
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: qq [-o|-c] <your question>"
+    echo "  -o, --opencode  use local Qwen3.5 (default)"
+    echo "  -c, --claude    use Claude Haiku"
+    return 1
+  fi
+
+  case $harness in
+    opencode)
+      OPENCODE_DISABLE_DEFAULT_PLUGINS=1 \
+      OPENCODE_DISABLE_FILEWATCHER=1 \
+      OPENCODE_DISABLE_AUTOCOMPACT=1 \
+      OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX=500 \
+      opencode run --pure --log-level ERROR -m local/qwen35-int4 "$@"
+      ;;
+    claude)
+      echo 'not implemented yet'
+      ;;
+  esac
+}
+
 # ─── Aliases ──────────────────────────────────────────────────────────────────
 
 alias fbn="find . -name"
@@ -179,3 +221,5 @@ fi
 # ─── Prompt ───────────────────────────────────────────────────────────────────
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
