@@ -136,6 +136,29 @@ function mysplit() {
   python3 -c "import sys; parts=sys.stdin.read().split('$1'); print('\n'.join(str(p) for p in parts))"
 }
 
+# Clone a repo as a bare repo with a worktree layout: <repo>/main
+function gwtclone() {
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: gwtclone <repo-url> [dir]"
+    return 1
+  fi
+  local url="$1"
+  local dir="${2:-$(basename "$url" .git)}"
+  git clone --bare "$url" "$dir/.bare"
+  echo "gitdir: ./.bare" > "$dir/.git"
+  git -C "$dir" worktree add main main 2>/dev/null \
+    || git -C "$dir" worktree add main -b main
+}
+
+# Create a new git worktree using the same name for branch and path
+function gwt() {
+  if [ -z "$1" ]; then
+    echo "Usage: gwt <branch-name>"
+    return 1
+  fi
+  git worktree add "$1" -b "$1"
+}
+
 # ─── Quick queries -o opencode, -c claude ─────────────────────────────────────
 
 qq() {
@@ -173,11 +196,10 @@ qq() {
       opencode run --pure --log-level ERROR -m local/qwen35-int4 "$@"
       ;;
     claude)
-      echo 'not implemented yet'
+      echo "$*" | claude -p --model haiku --tools '' --effort low --no-session-persistence --disable-slash-commands
       ;;
   esac
 }
-
 # ─── Aliases ──────────────────────────────────────────────────────────────────
 
 alias fbn="find . -name"
@@ -185,6 +207,7 @@ alias gw="./gradlew"
 alias c=cd
 alias g=git
 alias kct=kubectl
+alias lzg=lazygit
 
 if is_linux; then
   alias top=btop
