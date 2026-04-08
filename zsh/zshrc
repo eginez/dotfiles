@@ -222,4 +222,32 @@ fi
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# ─── Claude Code with local vLLM ────────────────────────────────────────────
 
+claude-local() {
+  local endpoint=$LOCAL_VLLM_ENDPOINT
+  local endpoint-tls= $TAILSCALE_VLLM_ENDPOINT
+  local model="qwen35-int4"
+  
+  # Parse mode argument
+  case "$1" in
+    ts|tailscale)
+      endpoint=endpoint-tls
+      shift
+      ;;
+    lan|local)
+      shift
+      ;;
+    *)
+      # No mode specified, default to LAN
+      ;;
+  esac
+  
+  ANTHROPIC_BASE_URL="$endpoint" \
+  ANTHROPIC_API_KEY=ignored \
+  ANTHROPIC_MODEL="$model" \
+  ANTHROPIC_SMALL_FAST_MODEL="$model" \
+  API_TIMEOUT_MS=600000 \
+  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+  claude "$@"
+}
