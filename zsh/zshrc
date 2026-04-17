@@ -225,14 +225,14 @@ fi
 # ─── Claude Code with local vLLM ────────────────────────────────────────────
 
 claude-local() {
-  local endpoint=$LOCAL_VLLM_ENDPOINT
-  local endpoint-tls= $TAILSCALE_VLLM_ENDPOINT
+  local endpoint="$LOCAL_VLLM_ENDPOINT"
+  local endpoint_tls="$TAILSCALE_VLLM_ENDPOINT"
   local model="qwen35-int4"
   
   # Parse mode argument
   case "$1" in
     ts|tailscale)
-      endpoint=endpoint-tls
+      endpoint="$endpoint_tls"
       shift
       ;;
     lan|local)
