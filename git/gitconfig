@@ -1,6 +1,8 @@
 [user]
-	email = esteban.ginez@docker.com
+	email = 175813+eginez@users.noreply.github.com
 	name = Esteban Ginez
+[includeIf "gitdir:~/src/docker/"]
+	path = ~/.gitconfig-docker
 [alias]
   	s = status
   	co = checkout
@@ -9,10 +11,16 @@
   	prb = pull --rebase
   	recent = for-each-ref --sort=-committerdate --count=10 --format='%(color:green)%(refname:short) %(color:red)%(committerdate:relative)%(color:reset)' refs/heads
   	recent-all = for-each-ref --sort=-committerdate --format='%(color:green)%(refname:short) %(color:red)%(committerdate:relative)%(color:reset)' refs/heads
-
+    wt = worktree
 [core]
 	excludesfile = ~/.gitignore_global
 	pager = diff-so-fancy | less --tabs=4 -RFX
   editor=nvim
 [init]
 	defaultBranch = main
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
