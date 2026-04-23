@@ -3,7 +3,9 @@ set -u          # die on undeclared vars
 set -o pipefail # die on pipe failures
 set -e          # die on error
 
-DOTFILES=$(pwd -P)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+DOTFILES="$SCRIPT_DIR"
+DOTFILES_ROOT="$DOTFILES"
 
 # ─── Flags ────────────────────────────────────────────────────────────────────
 
@@ -53,16 +55,7 @@ run_download() {
   fi
 }
 
-# Create a symlink; backs up any existing non-symlink file to .bak first.
-link_file() {
-  local src=$1 dst=$2
-  if [[ -e "$dst" && ! -L "$dst" ]]; then
-    log_sub "Backing up $dst -> ${dst}.bak"
-    run_cmd mv "$dst" "${dst}.bak"
-  fi
-  log_sub "Linking $src -> $dst"
-  run_cmd ln -sf "$src" "$dst"
-}
+source "$SCRIPT_DIR/symlinks.sh"
 
 # ─── Packages ─────────────────────────────────────────────────────────────────
 
@@ -197,14 +190,7 @@ install_zsh() {
   fi
 
   log_sub "Linking zsh configs..."
-  link_file "$DOTFILES/zsh/zshrc"    "$HOME/.zshrc"
-  link_file "$DOTFILES/zsh/p10k.zsh" "$HOME/.p10k.zsh"
-
-  local theme_src="$DOTFILES/zsh/lambda-color.zsh-theme"
-  local theme_dst="$HOME/.oh-my-zsh/custom/themes/lambda-color.zsh-theme"
-  if [[ -f "$theme_src" ]]; then
-    link_file "$theme_src" "$theme_dst"
-  fi
+  install_zsh_links
 
   _install_fzf_keybindings
 }
@@ -233,15 +219,14 @@ _install_fzf_keybindings() {
 
 install_git() {
   log "Linking git configs..."
-  link_file "$DOTFILES/git/gitconfig"       "$HOME/.gitconfig"
-  link_file "$DOTFILES/git/globalgitignore" "$HOME/.gitignore_global"
+  install_git_links
 }
 
 # ─── Tmux ─────────────────────────────────────────────────────────────────────
 
 install_tmux() {
   log "Linking tmux config..."
-  link_file "$DOTFILES/tmux/tmux.conf" "$HOME/.tmux.conf"
+  install_tmux_links
 }
 
 # ─── Neovim ───────────────────────────────────────────────────────────────────
@@ -275,20 +260,14 @@ install_nvim() {
     _install_neovim_linux
   fi
   log "Linking nvim config..."
-  run_cmd mkdir -p "$HOME/.config"
-  link_file "$DOTFILES/nvim" "$HOME/.config/nvim"
+  install_nvim_link
 }
 
 # ─── Ghostty (macOS only) ─────────────────────────────────────────────────────
 
 install_ghostty() {
-  if ! is_macos; then
-    log "Skipping ghostty (not supported on Linux)"
-    return
-  fi
   log "Linking ghostty config..."
-  run_cmd mkdir -p "$HOME/.config/ghostty"
-  link_file "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
+  install_ghostty_link
 }
 
 # ─── Dispatcher ───────────────────────────────────────────────────────────────
