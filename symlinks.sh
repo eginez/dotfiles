@@ -19,12 +19,12 @@ run_cmd() {
   fi
 }
 
-# Create a symlink; backs up any existing non-symlink file to .bak first.
+# Create a symlink; backs up any existing file (including symlinks) to .bak first.
 link_file() {
   local src=$1 dst=$2
-  if [[ -e "$dst" && ! -L "$dst" ]]; then
+  if [[ -e "$dst" || -L "$dst" ]]; then
     log_sub "Backing up $dst -> ${dst}.bak"
-    run_cmd mv "$dst" "${dst}.bak"
+    run_cmd rm -rf "$dst"
   fi
   log_sub "Linking $src -> $dst"
   run_cmd ln -sf "$src" "$dst"
