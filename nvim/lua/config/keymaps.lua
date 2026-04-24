@@ -44,18 +44,8 @@ keymap.set("n", "<leader>tp", ":tabp<CR>") --  go to previous tab
 -- Plugin Keybinds
 ----------------------
 
--- vim-maximizer
-keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window maximization
-
--- nvim-tree
-keymap.set("n", "<leader>n", ":Neotree toggle<CR>") -- toggle file explorer
-
--- telescope
-keymap.set("n", "<D-f>", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
-keymap.set("n", "<D-g>", "<cmd>Telescope live_grep<cr>") -- find string in current working directory as you type
-keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>") -- find string under cursor in current working directory
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>") -- list open buffers in current neovim instance
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>") -- list available help tags
+-- toggle maximize current window (snacks.zen.zoom)
+keymap.set("n", "<leader>sm", function() Snacks.zen.zoom() end, { desc = "Toggle window zoom" })
 
 -- git pickers (LazyVim uses snacks.picker, not telescope)
 keymap.set("n", "<leader>gc", function() Snacks.picker.git_log() end, { desc = "Git commits" })
