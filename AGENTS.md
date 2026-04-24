@@ -220,7 +220,7 @@ Ghostty terminal keybindings (macOS only):
 
 | Binding | Action |
 |---|---|
-| `ctrl+n` | New split (down) |
+| `ctrl+n` | New split (right) |
 | `ctrl+h/l/k/j` | Navigate splits |
 | `ctrl+tab` | Next tab |
 

@@ -1,5 +1,5 @@
 unfocused-split-opacity = 0.5
-keybind = ctrl+n=new_split:down
+keybind = ctrl+n=new_split:right
 keybind = ctrl+h=goto_split:left
 keybind = ctrl+l=goto_split:right
 keybind = ctrl+k=goto_split:up
