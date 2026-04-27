@@ -210,7 +210,48 @@ Uses [LazyVim](https://lazyvim.org) as the base configuration. The `nvim/` direc
 - `lua/config/options.lua` — additional options (currently empty, LazyVim defaults apply)
 - `lua/config/keymaps.lua` — custom keymaps
 - `lua/config/autocmds.lua` — custom autocommands
+- `lua/config/qflists.lua` — saved quickfix/Trouble workflow for agent-generated navigation lists
+- `lua/config/qflists_store.lua` — persistence for saved quickfix lists under the current Neovim cwd
+- `lua/config/qflists_commands.lua` — `:QfSave`, `:QfLoad`, and `:QfPick` command registration
 - `lua/plugins/` — plugin overrides and additions (currently only `example.lua`)
+
+### Saved qflists for agent navigation
+
+This repo includes a small Neovim helper for agent-generated navigation lists.
+
+Detailed usage and file-format docs live in `:help qflists` (`nvim/doc/qflists.txt`).
+
+Use it when an agent wants to give the user a named set of file/line jumps with a short explanation per jump.
+
+Storage rules:
+
+- Lists are saved under `./.qflists/` relative to the current working directory of the Neovim instance.
+- This is intentionally cwd-scoped, not global Neovim state.
+- The `.qflists/` directory should be treated as local workspace state, not tracked config.
+
+User-facing commands:
+
+- `:QfSave <name>` — save the current quickfix list
+- `:QfLoad <name>` — load a saved list and open it in Trouble if available
+- `:QfPick` — interactively pick and load a saved list
+- `<leader>fq` — shortcut for `:QfPick`
+
+Expected item shape:
+
+- Each quickfix item should include `filename`, `lnum`, `col`, and `text`.
+- `text` is the human explanation shown in Trouble/quickfix and should explain why that jump matters.
+
+Recommended agent workflow:
+
+1. Search the repo and identify the relevant file/line targets.
+2. Build a quickfix list where each item has a concise description in `text`.
+3. Push the list into the running Neovim instance by setting the quickfix list directly.
+4. Save it with a stable name if the user may want to reopen it later.
+
+Important implementation note:
+
+- For remote control, setting quickfix items directly is more reliable than trying to send JSON through `--remote-send`.
+- The remote path that worked reliably in this repo used `nvim --server <socket> --remote-expr` with `luaeval()` / `setqflist()`.
 
 ---
 

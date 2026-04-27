@@ -1,0 +1,92 @@
+*qflists.txt*    Saved quickfix lists for agent navigation
+
+qflists is a small helper for saving and reloading named quickfix lists,
+primarily for agent-generated navigation targets.
+
+===============================================================================
+CONTENTS                                                     *qflists-contents*
+
+1. Storage .................................................... |qflists-storage|
+2. Commands .................................................. |qflists-commands|
+3. File format ............................................ |qflists-file-format|
+4. Agent workflow ...................................... |qflists-agent-workflow|
+5. Remote control ...................................... |qflists-remote-control|
+
+===============================================================================
+1. Storage                                                      *qflists-storage*
+
+Lists are stored under `./.qflists/` relative to the current working directory
+of the Neovim instance.
+
+This is workspace-local state, not global Neovim state.
+
+===============================================================================
+2. Commands                                                    *qflists-commands*
+
+                                                        :QfSave {name}
+        Save the current quickfix list.
+
+                                                        :QfLoad {name}
+        Load a saved list and open it in Trouble if available.
+
+                                                            :QfPick
+        Interactively select and load a saved list.
+
+                                                         <leader>fq
+        Shortcut for |:QfPick|.
+
+===============================================================================
+3. File format                                            *qflists-file-format*
+
+Saved lists are JSON files with this shape:
+
+>
+  {
+    "title": "How qflists was wired",
+    "items": [
+      {
+        "filename": "/Users/eginez/src/dotfiles/main/nvim/init.lua",
+        "lnum": 3,
+        "col": 1,
+        "text": "Startup hook: init.lua calls require(\"config.qflists\").setup()."
+      },
+      {
+        "filename": "/Users/eginez/src/dotfiles/main/nvim/lua/config/qflists.lua",
+        "lnum": 80,
+        "col": 1,
+        "text": "Core write path: set() replaces the quickfix list and optionally persists it."
+      }
+    ]
+  }
+<
+
+Write files like `./.qflists/my_list.json` using that structure.
+
+Each quickfix item should include `filename`, `lnum`, `col`, and `text`.
+
+`text` is the human explanation shown in Trouble/quickfix and should explain
+why that jump matters.
+
+===============================================================================
+4. Agent workflow                                        *qflists-agent-workflow*
+
+1. Search the repo and identify the relevant file/line targets.
+2. Build quickfix items with `filename`, `lnum`, `col`, and a concise `text`
+   description.
+3. Push the items into the running Neovim instance by setting the quickfix list
+   directly.
+4. Save the list with a stable name if the user may want to reopen it later.
+
+===============================================================================
+5. Remote control                                        *qflists-remote-control*
+
+For remote control, setting quickfix items directly is more reliable than
+sending JSON via `--remote-send`.
+
+In this repo, the reliable path used:
+
+- `nvim --server <socket> --remote-expr`
+- `luaeval()`
+- `setqflist()`
+
+vim:tw=78:ts=8:noet:ft=help:norl:

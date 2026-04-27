@@ -55,3 +55,6 @@ keymap.set("n", "<leader>gs", function() Snacks.picker.git_status() end, { desc 
 
 -- restart lsp server (not on youtube nvim video)
 keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
+
+-- saved quickfix lists
+keymap.set("n", "<leader>fq", ":QfPick<CR>", { desc = "Saved quickfix lists" })
