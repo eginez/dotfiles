@@ -58,3 +58,7 @@ keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if ne
 
 -- saved quickfix lists
 keymap.set("n", "<leader>fq", ":QfPick<CR>", { desc = "Saved quickfix lists" })
+
+-- workbench (multi-repo) git
+keymap.set("n", "<leader>gw", "<cmd>WorkbenchStatus<cr>", { desc = "Git status (workbench)" })
+keymap.set("n", "<leader>gW", "<cmd>WorkbenchLazygit<cr>", { desc = "Lazygit (workbench picker)" })

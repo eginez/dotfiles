@@ -7,3 +7,4 @@ if vim.fn.isdirectory(doc_dir) == 1 then
 end
 
 require("config.qflists").setup()
+require("config.workbench").setup()
