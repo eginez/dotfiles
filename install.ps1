@@ -15,7 +15,7 @@
 
 .PARAMETER Components
     One or more components to install. If omitted, all are installed.
-    Valid values: packages, pixi, powershell, git, nvim, ghostty
+    Valid values: packages, pixi, powershell, git, nvim, ghostty, lazygit
 
 .EXAMPLE
     .\install.ps1
@@ -220,9 +220,21 @@ function install-ghostty {
     log "Skipping ghostty (not supported on Windows)"
 }
 
+# ─── Lazygit ──────────────────────────────────────────────────────────────────
+
+function install-lazygit {
+    log "Linking lazygit config..."
+    # Lazygit on Windows reads from %LOCALAPPDATA%\lazygit\config.yml by default.
+    $lazygitDir = "$env:LOCALAPPDATA\lazygit"
+    if (-not (Test-Path $lazygitDir)) {
+        if (-not $DryRun) { New-Item -ItemType Directory -Path $lazygitDir -Force | Out-Null }
+    }
+    link-file "$DOTFILES\lazygit\config.yml" "$lazygitDir\config.yml"
+}
+
 # ─── Dispatcher ───────────────────────────────────────────────────────────────
 
-$ALL_COMPONENTS = @('packages', 'pixi', 'powershell', 'git', 'nvim', 'ghostty')
+$ALL_COMPONENTS = @('packages', 'pixi', 'powershell', 'git', 'nvim', 'ghostty', 'lazygit')
 
 function usage {
     Write-Host "Usage: .\install.ps1 [-DryRun] [-SkipDownloads] [component...]"
@@ -251,6 +263,7 @@ function main {
             'git'        { install-git }
             'nvim'       { install-nvim }
             'ghostty'    { install-ghostty }
+            'lazygit'    { install-lazygit }
             default      { Write-Error "Unknown component: $component"; usage }
         }
     }

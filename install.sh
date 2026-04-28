@@ -270,9 +270,16 @@ install_ghostty() {
   install_ghostty_link
 }
 
+# ─── Lazygit ──────────────────────────────────────────────────────────────────
+
+install_lazygit() {
+  log "Linking lazygit config..."
+  install_lazygit_link
+}
+
 # ─── Dispatcher ───────────────────────────────────────────────────────────────
 
-ALL_COMPONENTS=(packages pixi zsh git tmux nvim ghostty)
+ALL_COMPONENTS=(packages pixi zsh git tmux nvim ghostty lazygit)
 
 usage() {
   echo "Usage: $0 [flags] [component...]"
@@ -307,6 +314,7 @@ main() {
       tmux)     install_tmux ;;
       nvim)     install_nvim ;;
       ghostty)  install_ghostty ;;
+      lazygit)  install_lazygit ;;
       *)        echo "Unknown component: $component"; usage ;;
     esac
   done
