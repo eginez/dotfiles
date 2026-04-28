@@ -1,0 +1,5 @@
+os:
+  # Use `e` to edit files. With nvim-remote, if lazygit was launched
+  # from inside nvim ($NVIM is set), the file opens in that parent
+  # nvim instance instead of spawning a nested one.
+  editPreset: nvim-remote

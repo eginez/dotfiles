@@ -64,6 +64,11 @@ install_ghostty_link() {
   link_file "$DOTFILES_ROOT/ghostty/config" "$HOME/.config/ghostty/config"
 }
 
+install_lazygit_link() {
+  run_cmd mkdir -p "$HOME/.config/lazygit"
+  link_file "$DOTFILES_ROOT/lazygit/config.yml" "$HOME/.config/lazygit/config.yml"
+}
+
 install_symlinks() {
   if [[ -z "$DOTFILES_ROOT" ]]; then
     echo "DOTFILES_ROOT is required" >&2
@@ -76,6 +81,7 @@ install_symlinks() {
   install_tmux_links
   install_nvim_link
   install_ghostty_link
+  install_lazygit_link
   log "Symlinks done"
 }
 
