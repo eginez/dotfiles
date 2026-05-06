@@ -42,7 +42,8 @@ install_zsh_links() {
 }
 
 install_git_links() {
-  link_file "$DOTFILES_ROOT/git/gitconfig" "$HOME/.gitconfig"
+  run_cmd mkdir -p "$HOME/.config/git"
+  link_file "$DOTFILES_ROOT/git/gitconfig" "$HOME/.config/git/config"
   link_file "$DOTFILES_ROOT/git/globalgitignore" "$HOME/.gitignore_global"
 }
 

@@ -201,7 +201,11 @@ function install-powershell {
 
 function install-git {
     log "Linking git configs..."
-    link-file "$DOTFILES\git\gitconfig"       "$env:USERPROFILE\.gitconfig"
+    $gitConfigDir = "$env:USERPROFILE\.config\git"
+    if (-not (Test-Path $gitConfigDir)) {
+        if (-not $DryRun) { New-Item -ItemType Directory -Path $gitConfigDir -Force | Out-Null }
+    }
+    link-file "$DOTFILES\git\gitconfig"       "$gitConfigDir\config"
     link-file "$DOTFILES\git\globalgitignore" "$env:USERPROFILE\.gitignore_global"
 }
 

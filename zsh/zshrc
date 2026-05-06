@@ -201,6 +201,10 @@ qq() {
       ;;
   esac
 }
+
+nvr() {
+  nvim --listen ./nvim.pipe
+}
 # ─── Aliases ──────────────────────────────────────────────────────────────────
 
 alias fbn="find . -name"
