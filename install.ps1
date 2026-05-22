@@ -56,7 +56,8 @@ function run-cmd {
         Write-Host "    [dry-run] would run: $args"
         return
     }
-    & $args[0] $args[1..($args.Length - 1)]
+    $cmd = $args[0]; $rest = @($args[1..($args.Length - 1)])
+    & $cmd @rest
 }
 
 # Run a network/download command, skipping if -DryRun or -SkipDownloads.
@@ -69,7 +70,8 @@ function run-download {
         Write-Host "    [skip-downloads] skipping: $args"
         return
     }
-    & $args[0] $args[1..($args.Length - 1)]
+    $cmd = $args[0]; $rest = @($args[1..($args.Length - 1)])
+    & $cmd @rest
 }
 
 # Returns $true if Windows Developer Mode is enabled (allows unprivileged symlinks).
@@ -121,9 +123,15 @@ function install-packages {
     # Install scoop if not present
     if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
         log-sub "Installing scoop..."
-        run-download powershell -Command {
-            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-            Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+        $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+        if ($isAdmin) {
+            run-download powershell -Command "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force -ErrorAction SilentlyContinue; & ([scriptblock]::Create((Invoke-RestMethod https://get.scoop.sh))) -RunAsAdmin"
+        } else {
+            run-download powershell -Command "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force -ErrorAction SilentlyContinue; Invoke-RestMethod https://get.scoop.sh | Invoke-Expression"
+        }
+        # Refresh PATH so scoop shims are available in this session
+        if ($scoopShims -and ($env:PATH -notlike "*$scoopShims*")) {
+            $env:PATH = "$scoopShims;$env:PATH"
         }
     } else {
         log-sub "scoop already installed, skipping"
@@ -134,6 +142,11 @@ function install-packages {
 
     log-sub "Installing core packages via scoop..."
     run-cmd scoop install neovim ripgrep jq fzf lazygit nodejs btop
+
+    # Reload PATH from registry so scoop-managed tools (e.g. nodejs) are available
+    $userPath    = [Environment]::GetEnvironmentVariable('PATH', 'User')
+    $machinePath = [Environment]::GetEnvironmentVariable('PATH', 'Machine')
+    $env:PATH    = "$userPath;$machinePath"
 
     log-sub "Installing diff-so-fancy via npm..."
     run-download npm install -g diff-so-fancy
@@ -174,8 +187,10 @@ function install-powershell {
     if (-not (Get-Module -ListAvailable -Name PSFzf)) {
         log-sub "Installing PSFzf module..."
         if (-not $DryRun -and -not $SkipDownloads) {
-            # Bootstrap NuGet provider (required by PS5.1's old PowerShellGet)
-            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser | Out-Null
+            # Bootstrap NuGet provider only on PS5.1 (PS7 ships with it)
+            if ($PSVersionTable.PSVersion.Major -lt 6) {
+                Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser | Out-Null
+            }
             Install-Module PSFzf -Scope CurrentUser -Force -AllowClobber
         } elseif ($DryRun) {
             log-sub "[dry-run] would run: Install-Module PSFzf -Scope CurrentUser -Force -AllowClobber"
