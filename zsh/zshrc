@@ -279,3 +279,6 @@ claude-local() {
   CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
   claude "$@"
 }
+
+# safe-defaults: package-manager wrappers
+export PATH="/Users/eginez/.local/bin:$PATH"
