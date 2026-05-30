@@ -255,7 +255,7 @@ fi
 claude-local() {
   local endpoint="$LOCAL_VLLM_ENDPOINT"
   local endpoint_tls="$TAILSCALE_VLLM_ENDPOINT"
-  local model="qwen35-int4"
+  local model="qwen3.6"
   
   # Parse mode argument
   case "$1" in
